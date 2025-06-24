@@ -1,0 +1,69 @@
+package application;
+
+import java.util.Locale;
+import java.util.Scanner;
+
+import entities.Retangulo;
+
+public class RetTotal {
+
+	public  static void main(String[] args) {
+		
+			Locale.setDefault(Locale.US);
+			Scanner sc = new Scanner(System.in);
+			
+		
+			
+	System.out.println("Cite as informações do Retangulo: ");
+		System.out.println("Largura: ");
+	double width = sc.nextDouble();
+				System.out.println("Altura: ");
+					double height = sc.nextDouble();
+					
+					Retangulo r = new Retangulo(width , height);
+					
+				
+					System.out.printf("Área : %.2f%n", r.calculatorArea()); 
+				
+			
+			
+			
+			sc.close();
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+(CLASSE INSTANCIADA DE UML)
+
+
+
+package entities;
+
+
+public class Retangulo {
+	
+	public  double width;
+	public  double height;
+	
+
+	public Retangulo() {
+		
+		this.width = 1.0;
+		this.height = 1.0;
+		
+	}
+	
+	
+public  Retangulo(double width , double height) {
+
+	this.height = height;
+	this.width = width;
+	
+	}
+
+	public  double calculatorArea() {	
+		return width * height;
+		
+	}
+	
+	
+	
+
+}
