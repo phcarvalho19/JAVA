@@ -1,0 +1,160 @@
+package application;
+
+import java.util.Locale;
+import java.util.Scanner;
+
+import entities.Conta;
+
+
+public class Banco {
+
+	public static void main(String[] args) {
+		Locale.setDefault(Locale.US);
+		Scanner sc = new Scanner(System.in);
+			
+		char deposit = 0;
+		double value = 0;
+	
+		
+		
+			System.out.println("Enter account number:" );
+		int numberAccount = sc.nextInt();
+		System.out.println();
+		
+			System.out.println("Enter account holder  :"  );
+	String holderAccount = sc.next();
+			
+	System.out.println();
+			
+		
+
+	 Conta cont = new Conta( numberAccount, holderAccount, deposit, value);	
+			System.out.println("Is there na initial deposit ?");
+			deposit = sc.next().charAt(0);
+			
+			
+			deposit = sc.next().charAt(0);
+
+			
+			if (deposit == 'y') {
+			
+				System.out.printf("Enter initial deposit value: ");
+				 value = sc.nextDouble(); 
+				
+				cont.depositValue( value);
+			}	
+			else if (deposit == 'n'){
+				
+				value = 0;
+			}
+			else {
+				System.out.println("ERRO!, Tente novamente: " );
+				deposit = sc.next().charAt(0);
+			}
+			
+			
+			System.out.println(cont);
+			
+			System.out.println("Enter a deposit value: ");
+			
+			value = sc.nextDouble();
+			
+			cont.depositValue(value);
+			
+			System.out.println(cont);
+			
+			System.out.println("Enter a withdraw value: ");
+			value = sc.nextDouble();
+			cont.withdrawValue(value);
+			
+			System.out.println(cont);
+			
+		 	
+		 
+		
+		
+		sc.close();
+
+	}
+
+}
+/////////////////////////////////////////
+classe UML (conta.java)
+
+package entities;
+
+public class Conta {
+
+	private  int numberAccount;
+	public String holderAccount;
+	public char deposit;
+	public double value;
+	
+
+	public Conta(int numberAccount, String holderAccount, char deposit, double value) {
+		
+		this.numberAccount = numberAccount;
+		this.holderAccount = holderAccount;
+		this.deposit = deposit;
+		this.value = value;
+	}
+
+
+	public Conta() {
+		
+	}
+
+
+	public int getNumberAccount() {
+		return numberAccount;
+	}
+
+
+	public void setNumberAccount(int numberAccount) {
+		this.numberAccount = numberAccount;
+	}
+
+
+	public String getHolderAccount() {
+		return holderAccount;
+	}
+
+
+	public void setHolderAccount(String holderAccount) {
+		this.holderAccount = holderAccount;
+	}
+
+
+
+	public double getValue() {
+		return value;
+	}
+
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+
+	public void depositValue(double value) {
+		this.value += value;
+	}
+	
+	public void withdrawValue(double value) {
+		this.value -= value + 5.00; 
+	}
+	
+	public String toString() {
+		return "Updated Account Data:"
+				+ " Account " 
+				+ numberAccount
+			    + " , Holder: "
+			    + holderAccount
+			    + " , Balance: $ "
+			    + String.format("%.2f", value);
+	}
+	
+	
+	
+	
+}
