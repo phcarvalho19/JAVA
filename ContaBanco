@@ -1,0 +1,196 @@
+ package conta_bancaria;
+
+public class Conta {
+
+	private String Name ;
+	private int Account = 2008 ;
+
+;
+	
+	public Conta(String Name, int Account) {
+		this.Name = Name;
+		this.Account = Account;
+	}
+	
+	
+	public String getName() {
+		return Name;
+	}
+
+	
+	public int getAccount() {
+		return Account;
+	}
+	
+	
+	
+	
+	
+	
+public static String  toMenu() {
+	return " 1. Consultar Saldo \n" 
+	 +"2. Consultar Cheque Especial\n"
+	 +"3. Depositar Dinheiro\n"
+	 +"4. Sacar Dinheiro\n"
+	 +"5. Pagar Boleto\n"
+	 +"6. Verificar se a conta está usando cheque especial\n"
+	 +"7. Encerrar\n";
+
+}
+// CLASSE PRINCIPAL 
+
+package conta_bancaria;
+
+import java.util.Locale;
+import java.util.Scanner;
+
+public class Banco {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		Locale.setDefault(Locale.US);
+
+		double saldo = 0;
+		double chequeUsado = 0;
+		int opção;
+
+		// 1. Obter informações do usuário e criar a conta.
+		System.out.println("Digite seu nome: ");
+		String name = sc.nextLine();
+
+		System.out.println("Seja bem-vindo ao Banco Bradesco");
+
+		System.out.println("Digite o número da sua conta: ");
+		int account = sc.nextInt();
+		sc.nextLine(); // Limpa o buffer do scanner
+
+		// A classe Conta deve ser definida em um arquivo separado.
+		// Exemplo de como a classe Conta pode ser:
+		// class Conta {
+		//     private String name;
+		//     private int account;
+		//     public Conta(String name, int account) {
+		//         this.name = name;
+		//         this.account = account;
+		//     }
+		//     public int getAccount() {
+		//         return account;
+		//     }
+		//     public static String toMenu() {
+		//         return "1 - Consultar saldo \n2 - Usar cheque especial \n3 - Depositar \n4 - Sacar \n5 - Pagar boleto \n6 - Pagar cheque especial \n7 - Sair";
+		//     }
+		// }
+		
+		Conta c = new Conta(name, account);
+
+		// 2. Verificar se a conta existe. Se não, o programa encerra.
+		if (account != c.getAccount()) {
+			System.out.println("Conta não localizada!");
+			sc.close();
+			return; // Encerra o programa
+		}
+
+		// 3. Obter o saldo inicial.
+		System.out.println("Digite seu saldo bancario: ");
+		saldo = sc.nextDouble();
+		sc.nextLine(); // Limpa o buffer do scanner
+
+		if (saldo < 0) {
+			System.out.println("Opção inválida! Saldo não pode ser negativo.");
+			sc.close();
+			return; // Encerra o programa
+		}
+
+		System.out.println("Saldo da conta: R$ " + String.format("%.2f", saldo));
+
+		// 4. Início do loop do-while para o menu de opções.
+		do {
+			System.out.println(Conta.toMenu());
+			opção = sc.nextInt();
+			sc.nextLine(); // Limpa o buffer do scanner
+
+			switch (opção) {
+				case 1:
+					System.out.println("Seu saldo atual: R$ " + String.format("%.2f", saldo));
+					break;
+
+				case 2:
+					double limiteCheque = (saldo < 500) ? 50.00 : saldo / 2;
+					System.out.println("Cheque Especial Disponivel: R$ " + String.format("%.2f", limiteCheque));
+
+					System.out.println("Deseja usar cheque especial? (s/n)");
+					char respostaCheque = sc.next().charAt(0);
+					if (respostaCheque == 's' || respostaCheque == 'S') {
+						System.out.println("Quanto do cheque especial deseja usar?");
+						double valorCheque = sc.nextDouble();
+						if (valorCheque <= limiteCheque) {
+							chequeUsado += valorCheque;
+							saldo += valorCheque;
+							System.out.println("Perfeito, seu cheque está na sua conta!");
+							System.out.println("Saldo atual: R$ " + String.format("%.2f", saldo));
+						} else {
+							System.out.println("Valor excede o limite do cheque especial.");
+						}
+					}
+					sc.nextLine(); // Limpa o buffer
+					break;
+
+				case 3:
+					System.out.println("Quantos R$ a ser depositado?");
+					double deposito = sc.nextDouble();
+					saldo += deposito;
+					System.out.println("Saldo atual R$: " + String.format("%.2f", saldo));
+					sc.nextLine(); // Limpa o buffer
+					break;
+
+				case 4:
+					System.out.println("Quantos reais deseja sacar: ");
+					double saque = sc.nextDouble();
+					if (saldo >= saque) {
+						saldo -= saque;
+						System.out.println("Saldo atual: R$ " + String.format("%.2f", saldo));
+					} else {
+						System.out.println("Saldo insuficiente.");
+					}
+					sc.nextLine(); // Limpa o buffer
+					break;
+
+				case 5:
+					System.out.println("Qual o valor do boleto: ");
+					double boleto = sc.nextDouble();
+					if (saldo >= boleto) {
+						saldo -= boleto;
+						System.out.println("BOLETO PAGO");
+						System.out.println("Saldo atual: R$ " + String.format("%.2f", saldo));
+					} else {
+						System.out.println("Fundos insuficientes.");
+					}
+					sc.nextLine(); // Limpa o buffer
+					break;
+
+				case 6:
+					if (chequeUsado > 0) {
+						double taxa = (chequeUsado * 0.20);
+						System.out.println("Você está utilizando R$ " + String.format("%.2f", chequeUsado) + " do seu cheque especial.");
+						System.out.println("Será cobrada uma taxa de 20%, totalizando R$ " + String.format("%.2f", taxa));
+						saldo -= (chequeUsado + taxa);
+						chequeUsado = 0; // Zera o valor do cheque especial após o pagamento
+						System.out.println("Cheque especial pago com sucesso. Saldo atual: R$ " + String.format("%.2f", saldo));
+					} else {
+						System.out.println("Você não está utilizando nosso cheque especial.");
+					}
+					break;
+
+				case 7:
+					System.out.println("Obrigado por acessar o banco Bradesco");
+					break;
+
+				default:
+					System.out.println("Opção Invalida");
+					break;
+			}
+		} while (opção != 7);
+
+		sc.close();
+	}
+}
